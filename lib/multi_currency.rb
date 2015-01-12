@@ -36,7 +36,7 @@ module MultiCurrency
 
         define_method "#{column}_in" do |currency_code, date = nil|
           if self.send("#{column}_source_amount").present? && self.send("#{column}_source_currency").present?
-            date = self.send("#{column}_rate_date") if date.nil?
+            date = self.send("#{column}_rate_date") || Date.today
             default_currency = self.send("#{column}_currency") rescue MultiCurrency.configuration.default_currency
             rate = MultiCurrency.configuration.default_converter.get_rate_and_cache(default_currency, currency_code, date)
             return self.send(column) * rate
