@@ -36,7 +36,7 @@ module MultiCurrency
 
         define_method "#{column}_in" do |currency_code, date = nil|
           if self.send("#{column}_source_amount").present? && self.send("#{column}_source_currency").present?
-            date = self.send("#{column}_rate_date") || Date.today
+            date = self.send("#{column}_rate_date") || (Date.try(:to_singapore) || Date.today)
             default_currency = self.send("#{column}_currency") rescue MultiCurrency.configuration.default_currency
             rate = MultiCurrency.configuration.default_converter.get_rate_and_cache(default_currency, currency_code, date)
             return self.send(column) * rate
@@ -50,7 +50,7 @@ module MultiCurrency
         multi_currency_columns.each do |column|
           if self.send("#{column}_source_amount").present? && self.send("#{column}_source_currency").present?
             eval("self.#{column}_currency = '#{MultiCurrency.configuration.default_currency.downcase}'")
-            date = self.send("#{column}_rate_date") || Date.today
+            date = self.send("#{column}_rate_date") || (Date.try(:to_singapore) || Date.today)
             eval("self.#{column}_rate_date = date")
             rate = MultiCurrency.configuration.default_converter.
               get_rate_and_cache(self.send("#{column}_source_currency"), self.send("#{column}_currency"), date)
