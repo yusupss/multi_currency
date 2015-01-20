@@ -11,7 +11,7 @@ module MultiCurrency
           rate = if exchange_rate.present?
             exchange_rate.rate
           else
-            response = Net::HTTP.get_response(URI("https://openexchangerates.org/api/historical/#{(date - 1).strftime("%Y-%m-%d")}.json?app_id=#{app_id}&base=#{source_currency.upcase}"))
+            response = Net::HTTP.get_response(URI("https://openexchangerates.org/api/historical/#{(date - 1).strftime("%Y-%m-%d")}.json?app_id=#{app_id}&base=#{source_currency.upcase}&symbols=#{to_currency.upcase}"))
             if response.is_a? Net::HTTPOK
               data = JSON.parse(response.body)
               rate_to = data["rates"]["#{to_currency.upcase}"]
