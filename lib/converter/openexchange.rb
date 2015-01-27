@@ -4,7 +4,7 @@ module MultiCurrency
     
       def self.get_rate_and_cache(source_currency, to_currency, date)
         app_id = ENV['OPEN_EXCHANGE_RATES_APP_ID'] || '6ecb58dda5bb46a2b4fc6bcfbffc8c91'
-        if source_currency.downcase == to_currency.downcase
+        if (source_currency.try(:downcase) == to_currency.try(:downcase))
           rate = 1.0
         else
           exchange_rate = ExchangeRate.find_by_from_code_and_to_code_and_date(source_currency.downcase, to_currency.downcase, date)
