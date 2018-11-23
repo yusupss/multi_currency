@@ -34,12 +34,16 @@ module MultiCurrency
               END").to_f
         end
 
-        define_method "#{column}_in" do |currency_code, date = nil|
+        define_method "#{column}_in" do |currency_code, date = nil, margin_rate = nil|
           if self.send("#{column}_source_amount").present? && self.send("#{column}_source_currency").present?
             date = self.send("#{column}_rate_date") || (Date.try(:to_singapore) || Date.today)
             default_currency = self.send("#{column}_currency") rescue MultiCurrency.configuration.default_currency
+            margin_rate_percentage = 0
+            if margin_rate.present? and currency_code != "USD"
+              margin_rate_percentage = margin_rate.to_f/100
+            end
             rate = MultiCurrency.configuration.default_converter.get_rate_and_cache(default_currency, currency_code, date)
-            return self.send(column) * rate
+            return self.send(column) * (rate + (rate * margin_rate_percentage))
           else
             return nil
           end
@@ -66,7 +70,7 @@ module MultiCurrency
       end
 
     end
-  
+
   end
 end
 
