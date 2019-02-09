@@ -30,7 +30,7 @@ module MultiCurrency
             sum("
               CASE #{column}_currency
                 WHEN '#{currency.downcase}' THEN #{column}
-                ELSE #{column} * (SELECT exchange_rates.rate FROM exchange_rates WHERE (exchange_rates.from_code = #{column}_currency AND to_code = '#{currency.downcase}' AND date = #{formatted_date}) )
+                ELSE #{column} * (SELECT exchange_rates.rate FROM exchange_rates WHERE (exchange_rates.from_code = #{column}_currency AND to_code = '#{currency.downcase}' AND date = #{formatted_date}) limit 1 )
               END").to_f
         end
 
