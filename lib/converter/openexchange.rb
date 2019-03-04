@@ -15,7 +15,7 @@ module MultiCurrency
             response = Net::HTTP.get_response(URI("https://openexchangerates.org/api/historical/#{(date - 1).strftime("%Y-%m-%d")}.json?app_id=#{app_id}&base=#{source_currency.upcase}&symbols=#{to_currency.upcase}"))
             if response.is_a? Net::HTTPOK
               log = Logger.new(STDOUT)
-              log.info "=========== API Calling =========== from #{source_currency} to #{to_currency} === calling at #{date} ============"
+              log.info "=========== OPENEXCHANGE_API_Calling =========== from #{source_currency} to #{to_currency} === calling at #{date} ============"
               data = JSON.parse(response.body)
               rate_to = data["rates"]["#{to_currency.upcase}"]
               ExchangeRate.create!(from_code: source_currency, to_code: to_currency, date: date, rate: rate_to.to_f)
