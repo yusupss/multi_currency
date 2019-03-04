@@ -5,3 +5,4 @@ gemspec
 
 gem 'activesupport'
 gem 'money', '~>5.1.1'
+gem 'logger'

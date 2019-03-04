@@ -3,6 +3,7 @@ require "multi_currency/configuration"
 require "converter/grand_trunk"
 require "converter/openexchange"
 require "multi_currency/converter"
+require 'logger'
 
 module MultiCurrency
   extend ActiveSupport::Concern
